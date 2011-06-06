@@ -2,7 +2,8 @@
 /**
  * Includes swiftmailer libraries
  */
-Libraries::add('swiftmailer', array(
-     'bootstrap' => 'swiftmailer/swift_required.php'
+\lithium\core\Libraries::add('swiftmailer', array(
+	'path' => dirname(__DIR__) . '/libraries/swiftmailer/lib',
+     'bootstrap' => 'swift_required.php'
 ));
 ?>
