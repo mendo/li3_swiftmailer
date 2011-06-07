@@ -66,10 +66,12 @@ class Swiftmailer extends \lithium\core\Adaptable {
 		$_connection = self::_config('connection');
 		$_defaults = array(
 			'to' => array('edmunds@mendo.lv'),
-			'from' => $_connection['from'],
 			'subject' => 'Testa epasts',
 			'data' => null
 		);
+		if(isset($_connection['from'])) {
+			$_defaults['from'] = $_connection['from'];
+		}
 		$params += $_defaults;
 
 
