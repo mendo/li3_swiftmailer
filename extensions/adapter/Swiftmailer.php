@@ -65,7 +65,7 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	public static function send($request, array $params = array()){
 		$_connection = self::_config('connection');
 		$_defaults = array(
-			'to' => array('edmunds@mendo.lv'),
+			'to' => array(),
 			'subject' => 'Testa epasts',
 			'data' => null
 		);
