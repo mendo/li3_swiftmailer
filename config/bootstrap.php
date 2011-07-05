@@ -20,7 +20,7 @@ Libraries::add('swiftmailer', array(
  */
 Swiftmailer::config(Libraries::get('li3_swiftmailer') + array(
 	'type' => 'php',
-	'from' => 'test@mendo.lv',
+	'from' => 'me@mydomain.com',
 	'host' => 'localhost',
 	'port' => 25
 ));
