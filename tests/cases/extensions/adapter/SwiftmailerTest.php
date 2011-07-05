@@ -21,15 +21,15 @@ class SwiftmailerTest extends \lithium\test\Unit {
 
 	function testSend() {
 		$sent = Swiftmailer::send($this->request, array(
-			'to' => array('edmunds@mendo.lv'),
-			'subject' => 'whatevaaa',
+			'to' => array('your.email@your.host'),
+			'subject' => 'test',
 			'data' => array('one'=>1),
 		));
 		$this->assertTrue($sent);
 
 		$sent = Swiftmailer::send($this->request, array(
-			'to' => array('edmunds@mendo.lv', 'edmunds@kalnins.net'),
-			'subject' => 'whatevaaa 2',
+			'to' => array('your.email@your.host', 'your.email@your-other.host'),
+			'subject' => 'test 2',
 			'data' => array('one'=>1),
 		));
 		$this->assertEqual($sent, 2);
