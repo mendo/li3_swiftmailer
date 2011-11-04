@@ -45,8 +45,6 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	 */
 	protected static $_adapters = 'li3_swiftmailer.extensions.adapter.swiftmailer';
 
-
-
 	/**
 	 * Nosūta pašu epastu izmantojot SwiftMaileri
 	 *
@@ -64,16 +62,18 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	 */
 	public static function send($request, array $params = array()){
 		$_connection = self::_config('connection');
+		$webroot = $request->get('env:HTTP_HOST').$request->get('env:base');
+		$scheme = $request->env('HTTPS') ? 'https://' : 'http://';
 		$_defaults = array(
 			'to' => array(),
 			'subject' => 'Testa epasts',
-			'data' => null
+			'data' => null,
 		);
 		if(isset($_connection['from'])) {
 			$_defaults['from'] = $_connection['from'];
 		}
 		$params += $_defaults;
-
+		$params['data'] += array('root'=>$scheme.$webroot);
 
 		if($request->controller && $request->action) {
 			$view  = new View(array(
