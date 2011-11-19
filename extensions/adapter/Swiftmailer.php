@@ -62,8 +62,15 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	 */
 	public static function send($request, array $params = array()){
 		$_connection = self::_config('connection');
-		$webroot = $request->get('env:HTTP_HOST').$request->get('env:base');
-		$scheme = $request->env('HTTPS') ? 'https://' : 'http://';
+
+		if($request->argv) {
+			$webroot = "/";
+			$scheme = "http://";
+		}
+		else {
+			$webroot = $request->get('env:HTTP_HOST').$request->get('env:base');
+			$scheme = $request->env('HTTPS') ? 'https://' : 'http://';
+		}
 		$_defaults = array(
 			'to' => array(),
 			'subject' => 'Testa epasts',
@@ -90,6 +97,25 @@ class Swiftmailer extends \lithium\core\Adaptable {
 				array(
 					'controller' => $request->controller,
 					'template' => $request->action,
+					'type' => 'mail',
+					'layout' => false
+				)
+			);
+		}
+		elseif(!empty($params['template'])) {
+			$view  = new View(array(
+				'loader' => 'File',
+				'renderer' => 'File',
+				'paths' => array(
+					'template' => '{:library}/views/emails/{:template}.{:type}.php'
+				)
+			));
+
+			$body = $view->render(
+				'template',
+				$params['data'],
+				array(
+					'template' => $params['template'],
 					'type' => 'mail',
 					'layout' => false
 				)
