@@ -87,7 +87,7 @@ class Swiftmailer extends \lithium\core\Adaptable {
 				'loader' => 'File',
 				'renderer' => 'File',
 				'paths' => array(
-					'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
+					'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
 				)
 			));
 
@@ -107,7 +107,8 @@ class Swiftmailer extends \lithium\core\Adaptable {
 				'loader' => 'File',
 				'renderer' => 'File',
 				'paths' => array(
-					'template' => '{:library}/views/emails/{:template}.{:type}.php'
+					'template' => '{:library}/views/emails/{:template}.{:type}.php',
+					'element' => '{:library}/views/elements/mails/{:template}.{:type}.php'
 				)
 			));
 
