@@ -63,7 +63,10 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	public static function send($request, array $params = array()){
 		$_connection = self::_config('connection');
 
-		if($request->argv) {
+		if($request == null) {
+			$scheme = $webroot = '';
+		}
+		elseif($request->argv) {
 			$webroot = "/";
 			$scheme = "http://";
 		}
@@ -82,7 +85,7 @@ class Swiftmailer extends \lithium\core\Adaptable {
 		$params += $_defaults;
 		$params['data'] += array('root'=>$scheme.$webroot);
 
-		if($request->controller && $request->action) {
+		if($request != null && $request->controller && $request->action) {
 			$view  = new View(array(
 				'loader' => 'File',
 				'renderer' => 'File',
