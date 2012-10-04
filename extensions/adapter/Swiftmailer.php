@@ -98,7 +98,7 @@ class Swiftmailer extends \lithium\core\Adaptable {
 				'template',
 				$params['data'],
 				array(
-					'controller' => $request->controller,
+					'controller' => strtolower($request->controller),
 					'template' => $request->action,
 					'type' => 'mail',
 					'layout' => false
