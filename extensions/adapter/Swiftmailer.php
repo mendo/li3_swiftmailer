@@ -45,6 +45,17 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	 */
 	protected static $_adapters = 'li3_swiftmailer.extensions.adapter.swiftmailer';
 
+
+	/**
+	 * Swiftmailer transport object
+	 */
+	protected static $_transport;
+
+	/**
+	 * Swiftmailer mailer object
+	 */
+	protected static $_mailer;
+
 	/**
 	 * Nosūta pašu epastu izmantojot SwiftMaileri
 	 *
@@ -129,20 +140,27 @@ class Swiftmailer extends \lithium\core\Adaptable {
 			$body = "Testa teksts";
 		}
 
-		if(!empty($_connection['type']) && $_connection['type'] == 'smtp') {
-			$transport = Swift_SmtpTransport::newInstance($_connection['host'], $_connection['port']);
-			if(!empty($_connection['username'])) {
-				$transport->setUsername($_connection['username']);
-			}
-			if(!empty($_connection['password'])) {
-				$transport->setUsername($_connection['password']);
-			}
-		}
-		else {
-			$transport = Swift_MailTransport::newInstance();
-		}
+		echo "body:\t" . strlen($body) . "\n";
+		echo "to:\t" . json_encode($params['to']) . "\n";
 
-		$mailer = Swift_Mailer::newInstance($transport);
+		if(empty(self::$_transport)) {
+			if(!empty($_connection['type']) && $_connection['type'] == 'smtp') {
+				self::$_transport = Swift_SmtpTransport::newInstance($_connection['host'], $_connection['port']);
+				if(!empty($_connection['username'])) {
+					self::$_transport->setUsername($_connection['username']);
+				}
+				if(!empty($_connection['password'])) {
+					self::$_transport->setUsername($_connection['password']);
+				}
+			}
+			else {
+				self::$_transport = Swift_MailTransport::newInstance();
+			}
+
+		}
+		if(empty(self::$mailer)) {
+			self::$_mailer = Swift_Mailer::newInstance(self::$_transport);
+		}
 		$message = Swift_Message::newInstance();
 		$message->setSubject($params['subject']);
 		$message->setFrom($params['from']);
@@ -151,10 +169,10 @@ class Swiftmailer extends \lithium\core\Adaptable {
 		$message->setContentType("text/html");
 
 		if(count($params['to']) > 1) {
-			return $mailer->batchSend($message);
+			return self::$_mailer->batchSend($message);
 		}
 		else {
-			return $mailer->send($message);
+			return self::$_mailer->send($message);
 		}
 	}
 
