@@ -57,6 +57,11 @@ class Swiftmailer extends \lithium\core\Adaptable {
 	protected static $_mailer;
 
 	/**
+	 * Swiftmailer message object
+	 */
+	protected static $_message;
+
+	/**
 	 * Nosūta pašu epastu izmantojot SwiftMaileri
 	 *
 	 * Servera daļa tiek konfigurēta pievienojot libraryu, vai izmantojot Swiftmailer::config().
@@ -158,21 +163,23 @@ class Swiftmailer extends \lithium\core\Adaptable {
 			}
 
 		}
-		if(empty(self::$mailer)) {
+		if(empty(self::$_mailer)) {
 			self::$_mailer = Swift_Mailer::newInstance(self::$_transport);
 		}
-		$message = Swift_Message::newInstance();
-		$message->setSubject($params['subject']);
-		$message->setFrom($params['from']);
-		$message->setTo($params['to']);
-		$message->setBody($body);
-		$message->setContentType("text/html");
+		if(empty(self::$_message)) {
+			self::$_message = Swift_Message::newInstance();
+		}
+		self::$_message->setSubject($params['subject']);
+		self::$_message->setFrom($params['from']);
+		self::$_message->setTo($params['to']);
+		self::$_message->setBody($body);
+		self::$_message->setContentType("text/html");
 
 		if(count($params['to']) > 1) {
-			return self::$_mailer->batchSend($message);
+			return self::$_mailer->batchSend(self::$_message);
 		}
 		else {
-			return self::$_mailer->send($message);
+			return self::$_mailer->send(self::$_message);
 		}
 	}
 
