@@ -145,9 +145,6 @@ class Swiftmailer extends \lithium\core\Adaptable {
 			$body = "Testa teksts";
 		}
 
-		echo "body:\t" . strlen($body) . "\n";
-		echo "to:\t" . json_encode($params['to']) . "\n";
-
 		if(empty(self::$_transport)) {
 			if(!empty($_connection['type']) && $_connection['type'] == 'smtp') {
 				self::$_transport = Swift_SmtpTransport::newInstance($_connection['host'], $_connection['port']);
