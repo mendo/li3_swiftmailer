@@ -12,7 +12,7 @@ use Swift_SmtpTransport;
 use Swift_MailTransport;
 use Swift_Mailer;
 use Swift_Message;
-//use Swift_Attachment;
+use Swift_Attachment;
 
 /**
  * Swiftmailer adapteris.
@@ -171,6 +171,12 @@ class Swiftmailer extends \lithium\core\Adaptable {
 		self::$_message->setTo($params['to']);
 		self::$_message->setBody($body);
 		self::$_message->setContentType("text/html");
+
+		if(!empty($params['attachments'])) {
+			foreach($params['attachments'] as $path) {
+				self::$_message->attach(Swift_Attachment::fromPath($path));
+			}
+		}
 
 		if(count($params['to']) > 1) {
 			return self::$_mailer->batchSend(self::$_message);
